@@ -1,0 +1,42 @@
+paste <(cat <<'EOF'
+
+EXECUTION
+---------
+codex "prompt"      - interactive session
+codex exec "prompt" - one-shot batch
+
+APPROVALS
+---------
+default       - adaptive prompts
+--yes         - auto-approve prompts
+--full-auto   - minimal prompting
+-a never      - always ask
+
+SANDBOX
+-------
+default               - workspace-write
+-s read-only          - no file writes
+-s workspace-write    - repo writes
+-s danger-full-access - full access
+
+EOF
+) <(cat <<'EOF'
+
+SLASH COMMANDS
+--------------
+/status     - session config
+/diff       - show git diff
+/review     - review working tree
+/compact    - summarize context
+/init       - scaffold AGENTS.md
+/model      - switch active model
+/approvals  - change approval mode
+
+GUIDANCE FILES
+--------------
+~/.codex/AGENTS.md     - global rules
+repo/AGENTS.md         - project rules
+~/.codex/prompts/*.md  - custom commands
+
+EOF
+) | awk -F'\t' '{ printf "%-50s  %s\n", $1, $2 }'

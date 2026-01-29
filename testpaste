@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+paste \
+  <(cat <<'EOF'
+short
+a bit longer
+   indented
+      indented more
+this is much longer than the others
+EOF
+) \
+  <(cat <<'EOF'
+R1
+R2
+   indented
+      indented more
+R3
+EOF
+) \
+| awk -F'\t' '{ printf "%-40s  %s\n", $1, $2 }'
+

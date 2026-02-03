@@ -1,0 +1,13 @@
+Vim CLI Usage
+-----------------------
+vim scp://user@machine/path   #path based on home dir
+
+vim scp://user@machine//path  #absolute path
+
+vim rcp://user@machine/path
+
+vim ftp://user@machine/path
+
+vim sftp://user@machine/path
+
+

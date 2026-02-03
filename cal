@@ -1,0 +1,47 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use v5.38;   # enables: say, signatures, state.
+use Data::Dumper;    #print Dumper($var_ref)
+use feature qw/say class/;
+no warnings 'experimental::class';
+
+
+my ($sec,$min,$hour,$mday,$mon,$year,$wday) = localtime(time);
+
+$year += 1900;
+my $isleap = $year % 4 == 0;
+my $wdayname  = qw(Sunday Monday Tuesday Wednesday Thursday Friday Saturday)[$wday];
+my $monthname = qw(January February March April May June July
+                   August September October November December)[$mon];
+my $daysinmonth = $isleap ? (31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)[$mon]
+                          : (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)[$mon];
+my $mon1stwday = $wday - ($mday % 7) +1;
+
+#say '1st wday of month = ', $mon1stwday;
+#say 'weekday = ', $wday, ' ', $wdayname;
+#say $mon+1, ' ', $monthname;
+#say 'month day = ', $mday;
+#say $year;
+#say 'is leap = ', $isleap;
+
+print "\n";
+#print "000000000011111111112222222222333\n";
+#print "012345678901234567890123456789012\n";
+
+print ' ' x (16-length($monthname)/2) . $monthname;
+print "\n\n";
+print '    ' x $mon1stwday;
+
+my $weekday = $mon1stwday;
+for (my $d=1; $d<=$daysinmonth; $d++) {
+   print $d == $mday ? $d < 10 ? ' (' : '(' 
+                     : $d < 10 ? '  ' : ' ';
+   print $d;
+   print $d == $mday ? ')' : ' ';
+   if (++$weekday == 8) {
+      print "\n\n";
+      $weekday = 0;
+   }
+}
+print "\n";

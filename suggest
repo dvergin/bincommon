@@ -1,0 +1,30 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use feature 'say';
+#use Data::Dumper;    #print Dumper($var_ref)
+
+use lib '/home/dvergin/bin';
+use dv_openai;
+use Getopt::Long;
+
+my $temperature = 0;
+my $length      = 2000;
+
+my @errs;
+{
+    local $SIG{__WARN__} = sub { push @errs, @_ };
+    my $ok = GetOptions(
+        't|temperature=i' => \$temperature,
+        'l|length=i'      => \$length,
+    );
+    die "Option error: " . join('', @errs) unless $ok;
+}
+
+my $req = join ' ', @ARGV;
+
+#my $prompt = "bash command line to $req";
+#$prompt =~ s/how to //;
+#say "\nRequest: [$req]";
+
+say dv_openai->new->query({prompt => $req, length => $length}), "\n";

@@ -1,0 +1,7 @@
+curl wttr.in/Sudden+Valley
+
+# See: curl wttr.in/:help
+#
+# Shows Fahrenheit for U.S. and Celsius elsewhere.
+# Add ?u to see Fahrenheit or ?m to see Celsius.
+

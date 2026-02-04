@@ -3,20 +3,21 @@ paste <(cat <<'EOF'
 EVERYDAY WORKFLOW
 -----------------
 git add FILE          - stage file
-git add .             - stage all new, modified, and deleted files
-                           in _current_ dir & subdirs
+git add .             - stage all new, modified, and deleted
+                           files in _current_ dir & subdirs
 git add  -A / --all   - stages all changes in this repository, 
                            regardless of which folder you are in
-git add -u / --update - stage edits & dels of files Git knows about
+git add -u / --update - stage edits & dels of files known to Git
                            but ignore new (untracked) files
 
 git commit -m "msg"   - establish local snapshot to be pushed
 git push              - send commits to GitHub
 
 git fetch             - fetch only
+git pending           - git fetch && git diff --name-only ..@{u}
 git pull              - fetch and merge
 
-git status            - working tree
+git status            - status of local working tree
 git diff              - unstaged changes
 git diff --staged     - staged changes
 
@@ -39,20 +40,25 @@ git remote add origin URL      - link GitHub
 git push -u origin main        - push initial commit
                  ==> See: AUTHENTICATION  
 
-AUTHENTICATION
+AUTHENTICATION  (git needs a token)
 --------------
-git needs a token. On your github page go to:  
+In CLI do:  
+    git config --global credential.helper store
+         (tells git to store token in ~/.git-credentials)
+On GitHub page go to: Settings
+    -> Developer Settings -> Personal access tokens
+    -> Tokens (classic) -> Generate new token (classic)
+            Enter name of machine in "Note"
+    Copy the token to use as pwd on CLI
+            (use token as pwd on CLI)
+Then: 
+    git push -u origin main   #For new local source
+or: git push                  #After clone and local add
+    (And enter token as pwd. git stores token as above)
 
-Settings -> Developer Settings -> Personal access tokens  
-         -> Tokens (classic) -> Generate new token (classic)  
-                Enter name of machine in "Note"  
-         Copy the token to use as pwd on CLI  
-                (use token as pwd on CLI)  
- Then in CLI do:  
-         git config --global credential.helper store  
-              (tells git to store token in ~/.git-credentials)  
- Then: git push -u origin main  
-            (And enter token as pwd. git stores token as above)  
-
+MISCELLANEOUS
+-------------
+git config --global alias.<alias_name> '!....'
+Config files is ~/.gitconfig
 EOF
-) | awk -F'\t' '{ printf "%-70s  %s\n", $1, $2 }'
+) | awk -F'\t' '{ printf "%-65s  %s\n", $1, $2 }'

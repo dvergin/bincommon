@@ -6,7 +6,7 @@ use Data::Dumper;    #print Dumper($var_ref)
 use feature qw/say class/;
 no warnings 'experimental::smartmatch', 'experimental::class';
 
-say 'yes';
+say 'yes sir!';
 
 class Example {
    field $x = 3;

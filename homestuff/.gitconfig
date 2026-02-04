@@ -1,0 +1,9 @@
+[user]
+	email = dvergin@fastmail.net
+	name = David Vergin
+[credential]
+	helper = store
+[core]
+	editor = vim
+[alias]
+	pending = !git fetch && git diff --name-only ..@{u}

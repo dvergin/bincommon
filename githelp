@@ -42,7 +42,7 @@ git push -u origin main        - push initial commit
 
 AUTHENTICATION  (git needs a token)
 --------------
-In CLI do:  
+In CLI do:    (First check ~/.gitconfig for this setting)
     git config --global credential.helper store
          (tells git to store token in ~/.git-credentials)
 On GitHub page go to: Settings
@@ -61,4 +61,4 @@ MISCELLANEOUS
 git config --global alias.<alias_name> '!....'
 Config files is ~/.gitconfig
 EOF
-) | awk -F'\t' '{ printf "%-65s  %s\n", $1, $2 }'
+) | awk -F'\t' '{ printf "%-66s  %s\n", $1, $2 }'

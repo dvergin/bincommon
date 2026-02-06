@@ -4,7 +4,7 @@ use warnings;
 use feature 'say';
 #use Data::Dumper;    #print Dumper($var_ref)
 
-use lib '/home/dvergin/bin';
+use lib '/home/dvergin/bincommon/perlmodules';
 use dv_openai;
 use Getopt::Long;
 

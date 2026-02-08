@@ -56,7 +56,7 @@ sub new {
 #######################################################################
 sub get_model_list {
 #######################################################################
-   my $apikey = $ENV{'OPENAI_API_KEY'};
+   my $apikey = $ENV['OPENAI_API_KEY'];
    my $apiurl = 'https://api.openai.com/v1/models';
    my $response = HTTP::Tiny->new->get( $apiurl, { headers => {'Authorization' => "Bearer $apikey" }, });
    my $content = $response->{'content'};
@@ -80,7 +80,7 @@ sub query {
    my $opts   = shift;
    my $prompt = $opts->{'prompt'};
    my $length = $opts->{'length'} || 50;
-   my $apikey = $ENV{'OPENAI_API_KEY'};
+   my $apikey = $ENV['OPENAI_API_KEY'];
    my $model  = dv_util->new->slurp('/home/dvergin/bincommon/perlmodules/CurrentOpenAIModel.txt');
    chomp($model);
    my $apiurl = 'https://api.openai.com/v1/chat/completions';

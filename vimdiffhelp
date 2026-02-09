@@ -1,0 +1,45 @@
+paste <(cat <<'EOF'
+
+VIMDIFF CHEATSHEET
+==================
+
+LAUNCH
+------
+vimdiff file1 file2  Diff two files
+:diffsplit file2     Diff file2 from inside Vim
+
+NAVIGATION
+----------
+]c                   Next change
+[c                   Previous change
+
+COPY CHANGES BETWEEN WINDOWS
+----------------------------
+do                   Obtain change from other window
+dp                   Put change into other window
+
+EOF
+) <(cat <<'EOF'
+
+GENERAL CONCEPTS
+----------------
+You can edit the files using 
+normal vim edit commands
+
+FOLDING (COLLAPSED BLOCKS)
+--------------------------
+zo          Open fold under cursor
+zO          Open fold recursively
+za          Alternate fold/unfold
+zR          Reveal all folds
+zM          Mash down all folds
+
+WINDOW MOVEMENT
+---------------
+Ctrl-w h    Move to left window
+Ctrl-w l    Move to right window
+Ctrl-w k    Move to upper window
+Ctrl-w j    Move to lower window
+
+EOF
+) | awk -F'\t' '{ printf "%-55s  %s\n", $1, $2 }'

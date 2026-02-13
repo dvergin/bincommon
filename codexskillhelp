@@ -1,0 +1,92 @@
+paste <(cat <<'EOF'
+
+CODEX SKILLS
+============
+
+DIRECTORY STRUCTURE:
+   skill-name/
+      SKILL.md     (req - instructions + routing)
+      scripts/     (executable actions)
+      references/  (domain knowledge)
+      templates/   (output patterns)
+      config/      (defaults - no secrets)
+      fixtures/    (test examples)
+      schemas/     (structured formats)
+      docs/        (human reference)
+
+LOCATION:
+   repo/.codex/skills/  (project local)
+   ~/.codex/skills/    (user global)
+   /etc/codex/skills/   (system wide)
+
+### Skill Discovery Rules
+
+Directory contains → `SKILL.md`
+Front matter includes → name + description
+Description → routing signal
+
+SKILL.md STRUCTURE:
+---
+name: skill-name
+description: When to use skill
+---
+
+When to use
+Inputs required
+Safety rules
+Execution instructions
+
+SCRIPTS
+Purpose:
+Execute work
+Call APIs
+Transform data
+Run tools
+
+EOF
+) <(cat <<'EOF'
+
+SCRIPT NAMES:
+   object-verb
+   mail-send
+   git-pr-review
+   security-audit
+
+SCRIPT FOLDER NAME:
+   ≈ skill identity**
+
+SKILLS ARE TRIGGERED:
+   Match based on:
+      * User request intent
+      * SKILL.md description
+      * Explicit naming
+
+ADVANCED SKILL DESIGN
+   * Clear use conditions
+   * Required input checklist
+   * Safety / confirmation rules
+   * Exact execution commands
+   * Error handling guidance
+   Never store:
+      API keys, Passwords, Tokens
+   Use: env, external config
+
+Codex can:
+   * Generate skill skeleton
+   * Write SKILL.md
+   * Create scripts
+
+You can also use:
+   * skill-creator tools
+   * skill installer workflows
+
+Good Skill Traits
+   Deterministic behavior
+   Clear scope boundaries
+   Minimal hidden assumptions
+   Script-backed execution
+   Explicit confirmation rules
+   Input validation
+
+EOF
+) | awk -F'\t' '{ printf "%-50s  %s\n", $1, $2 }'

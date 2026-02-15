@@ -34,9 +34,10 @@ SLASH COMMANDS
 
 GUIDANCE FILES
 --------------
-~/.codex/AGENTS.md     - global rules
+~/.codex/AGENTS.md     - global rules (see codexagentshelp)
 repo/AGENTS.md         - project rules
 ~/.codex/prompts/*.md  - custom commands
+~/.codex/skills/       - (see codexskillhelp)
 
 EOF
 ) | awk -F'\t' '{ printf "%-50s  %s\n", $1, $2 }'

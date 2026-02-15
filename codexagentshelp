@@ -1,0 +1,149 @@
+paste <(cat <<'EOF'
+
+GENERAL SETUP - COMBINE:
+1. a profile in `config.toml` 
+   (model + approval/tooling defaults)
+2. AGENTS.md instructions (
+   workflow + guardrails + repo conventions).
+
+1) Profiles in `~/.codex/config.toml`
+
+Profiles are named configuration bundles. 
+You activate them with `--profile <name>`, 
+or set a default with `profile = "<name>"`
+in a global/local config.toml OUTSIDE any
+of the profile blocks..
+
+TOML:
+# ~/.codex/config.toml
+
+[profiles.pr-reviewer]
+model = "gpt-5-pro"
+model_reasoning_effort = "high"
+approval_policy = "never"
+developer_instructions = """
+  Act as a strict code reviewer.
+  Focus on correctness, security, perf.
+  Do not modify files unless explicitly asked.
+"""
+
+[profiles.refactorer]
+model = "gpt-5.2"
+approval_policy = "on-request"
+developer_instructions = """
+  Prefer small, staged refactors. 
+  Preserve behavior. Keep diffs minimal.
+"""
+
+[profiles.yolo-one-shot]
+model = "gpt-5.2"
+approval_policy = "never"
+developer_instructions = """
+  You may run commands and edit files without asking. 
+  Keep a clear summary of changes.
+"""
+
+Run with a chosen “agent” profile:
+codex --profile pr-reviewer \
+  "Review changes and list actionable issues."
+codex --profile refactorer  \
+  "Refactor my_config() in @do_it.py; preserve behavior."
+codex --profile yolo-one-shot - < prompt.md
+
+Codex resolves settings with CLI overrides first, 
+then profile, then project config layers.
+
+2) Add AGENTS.md to define the agent’s workflow in context
+
+Codex reads and layers `AGENTS.md` files before work
+from global → repo root → subdirectory overrides.
+
+GLOBAL DEFAULTS
+~/.codex/AGENTS.md
+
+MD:
+## Working agreements
+- Prefer minimal diffs.
+- If tests exist, run them after code changes.
+- Ask before adding new dependencies.
+
+--------------------------------------------------------------------------------
+
+Custom instructions with AGENTS.md
+-- https://developers.openai.com/codex/guides/agents-md/
+Advanced Configuration
+-- https://developers.openai.com/codex/config-advanced/
+Config basics
+-- https://developers.openai.com/codex/config-basic/?utm_source=chatgpt.com
+Use Codex with the Agents SDK
+-- https://developers.openai.com/codex/guides/agents-sdk/?utm_source=chatgpt.com
+
+EOF
+
+) <(cat <<'EOF'
+
+
+### Repo rules (project-specific “agent” behavior)
+
+`<repo>/AGENTS.md` ([OpenAI Developers][1])
+
+```md
+## Setup
+- Install: `pnpm install`
+- Test: `pnpm test`
+- Lint: `pnpm lint`
+
+## Guardrails
+- Do not modify lockfiles unless explicitly requested.
+- Never change public API signatures without approval.
+```
+
+### Narrow “agent” overrides per area
+
+`services/payments/AGENTS.override.md` ([OpenAI Developers][1])
+
+```md
+## Payments rules
+- Run `make test-payments` (not `pnpm test`).
+- Any auth logic change must include tests.
+```
+
+Start Codex from that directory (or use `--cd`) and it will include
+the nearer override later in the instruction chain.
+
+---
+
+## 3) “Agent” = Profile + AGENTS.md, in practice
+
+**PR reviewer agent**
+
+* Use `--profile pr-reviewer`
+* Put repo review criteria in `AGENTS.md`
+* Prompt example:
+
+```bash
+codex --profile pr-reviewer "Review the current branch diff. 
+List high/med/low issues with file+line hints. No code changes."
+```
+
+**Refactor agent**
+
+* Use `--profile refactorer`
+* Put “preserve behavior / run tests” rules in `AGENTS.md`
+* Prompt example:
+
+bash
+codex --profile refactorer "Refactor parse_config() in @do_it.py \
+    for readability. Preserve behavior. Run tests."
+
+
+---
+
+## 4) If you meant “Agents SDK agents” (different thing)
+
+Codex can also be run as an MCP server and used from other agent 
+frameworks (e.g., OpenAI Agents SDK). That's a separate setup path.
+
+
+EOF
+) | awk -F'\t' '{ printf "%-60s  %s\n", $1, $2 }'

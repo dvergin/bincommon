@@ -5,18 +5,18 @@ VIMDIFF CHEATSHEET
 
 LAUNCH
 ------
-vimdiff file1 file2  Diff two files
+vimdiff file1 file2  Diff edit two files
 :diffsplit file2     Diff file2 from inside Vim
 
 NAVIGATION
 ----------
-]c                   Next change
-[c                   Previous change
+]c   Next change
+[c   Previous change
 
 COPY CHANGES BETWEEN WINDOWS
 ----------------------------
-do                   Obtain change from other window
-dp                   Put change into other window
+dp   Diff Put change into other window
+do   Diff Obtain change from other window
 
 EOF
 ) <(cat <<'EOF'
@@ -28,18 +28,19 @@ normal vim edit commands
 
 FOLDING (COLLAPSED BLOCKS)
 --------------------------
-zo          Open fold under cursor
-zO          Open fold recursively
-za          Alternate fold/unfold
-zR          Reveal all folds
-zM          Mash down all folds
+zo            Open fold under cursor
+zO            Open fold recursively
+za            Alternate fold/unfold
+zR            Reveal all folds
+zM            Mash down all folds
 
 WINDOW MOVEMENT
 ---------------
-Ctrl-w h    Move to left window
-Ctrl-w l    Move to right window
-Ctrl-w k    Move to upper window
-Ctrl-w j    Move to lower window
+^Ww or ^W^W   Move to other window
+^W h or ^W->  Move to left window
+^W l or ^W->  Move to right window
+^W k          Move to upper window
+^W j          Move to lower window
 
 EOF
-) | awk -F'\t' '{ printf "%-55s  %s\n", $1, $2 }'
+) | awk -F'\t' '{ printf "%-50s  %s\n", $1, $2 }'

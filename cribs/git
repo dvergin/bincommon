@@ -1,4 +1,3 @@
-paste <(cat <<'EOF'
 
 EVERYDAY WORKFLOW
 -----------------
@@ -28,8 +27,7 @@ cd REPO               - enter directory
 git status            - confirm clean 
                  ==> See: AUTHENTICATION
 
-EOF
-) <(cat <<'EOF'
+<BREAK>
 
 CREATE FROM LOCAL DIRECTORY
 ---------------------------
@@ -60,5 +58,3 @@ MISCELLANEOUS
 -------------
 git config --global alias.<alias_name> '!....'
 Config files is ~/.gitconfig
-EOF
-) | awk -F'\t' '{ printf "%-66s  %s\n", $1, $2 }'

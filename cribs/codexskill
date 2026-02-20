@@ -1,4 +1,3 @@
-paste <(cat <<'EOF'
 
 CODEX SKILLS
 ============
@@ -43,8 +42,7 @@ Call APIs
 Transform data
 Run tools
 
-EOF
-) <(cat <<'EOF'
+<BREAK>
 
 SCRIPT NAMES:
    object-verb

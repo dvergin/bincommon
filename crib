@@ -1,0 +1,52 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use v5.38;   # enables: say, signatures, state, switch
+use Data::Dumper;    #print Dumper($var_ref)
+use lib '/home/dvergin/bin';
+use dv_util;
+
+my $util = dv_util->new();
+my $home = $ENV{'HOME'};
+my $choice = $ARGV[0];
+my @cribfiles = sort
+                 map { m#/([^/]+)$# }
+                 glob("$home/bincommon/cribs/*");
+
+unless ($choice) {
+   help(@cribfiles);
+   exit;
+}
+
+if (grep /^$choice$/, @cribfiles) {
+   display_crib($choice);
+} else {
+   say "\nBAD PARAMETER";
+   help(@cribfiles);
+}
+
+###########################################################################
+sub display_crib {
+###########################################################################
+   my $choice = shift;
+   my $cribcontent = $util->slurp("$home/bincommon/cribs/$choice");
+   my ($leftside, $rightside) = $cribcontent =~ /(.+?)<BREAK>(.+)/s;
+   my @leftlines  = split /\n/, $leftside,  -1;   # -1 disables truncating trailing empty lines
+   my @rightlines = split /\n/, $rightside, -1;
+   my $numlines   = scalar @leftlines > scalar @rightlines ? scalar @leftlines 
+                                                           : scalar @rightlines;
+   my $maxlen = 0;
+   (length > $maxlen) && ($maxlen = length) for @leftlines;
+   for (my $i = 0; $i < $numlines; $i++) {
+      say $util->pad_right($leftlines[$i] || '', $maxlen + 2), $rightlines[$i] || '';
+   }
+}
+
+###########################################################################
+sub help {
+###########################################################################
+   my @cribfiles = @_;
+   say "\nUSAGE:";
+   say "   crib $_" for @cribfiles;
+   say "";
+}

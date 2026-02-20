@@ -1,11 +1,16 @@
 echo -------------------------------------------------------
 echo
-neofetch
+/usr/bin/neofetch
 echo
 echo -------------------------------------------------------
 echo
 echo MEMORY:
 free --human
+echo
+echo -------------------------------------------------------
+echo
+echo CPU COUNT:
+lscpu | grep '^CPU(s):'
 echo
 echo -------------------------------------------------------
 echo

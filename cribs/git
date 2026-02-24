@@ -43,9 +43,10 @@ AUTHENTICATION  (git needs a token)
 In CLI do:    (First check ~/.gitconfig for this setting)
     git config --global credential.helper store
          (tells git to store token in ~/.git-credentials)
-On GitHub page go to: Settings
-    -> Developer Settings -> Personal access tokens
-    -> Tokens (classic) -> Generate new token (classic)
+On GitHub page go to: https://github.com/settings/tokens
+    or Settings -> Developer Settings 
+    -> Personal access tokens -> Tokens (classic) 
+    -> Generate new token (classic)
             Enter name of machine in "Note"
     Copy the token to use as pwd on CLI
             (use token as pwd on CLI)

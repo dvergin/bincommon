@@ -30,15 +30,21 @@ sub display_crib {
 ###########################################################################
    my $choice = shift;
    my $cribcontent = $util->slurp("$home/bincommon/cribs/$choice");
-   my ($leftside, $rightside) = $cribcontent =~ /(.+?)<BREAK>(.+)/s;
-   my @leftlines  = split /\n/, $leftside,  -1;   # -1 disables truncating trailing empty lines
-   my @rightlines = split /\n/, $rightside, -1;
-   my $numlines   = scalar @leftlines > scalar @rightlines ? scalar @leftlines 
+   if ($cribcontent =~ /<BREAK>/) {
+      # TWO COLUMN OPTION
+      my ($leftside, $rightside) = $cribcontent =~ /(.+?)<BREAK>(.+)/s;
+      my @leftlines  = split /\n/, $leftside,  -1;   # -1 disables truncating trailing empty lines
+      my @rightlines = split /\n/, $rightside, -1;
+      my $numlines   = scalar @leftlines > scalar @rightlines ? scalar @leftlines 
                                                            : scalar @rightlines;
-   my $maxlen = 0;
-   (length > $maxlen) && ($maxlen = length) for @leftlines;
-   for (my $i = 0; $i < $numlines; $i++) {
-      say $util->pad_right($leftlines[$i] || '', $maxlen + 2), $rightlines[$i] || '';
+      my $maxlen = 0;
+      (length > $maxlen) && ($maxlen = length) for @leftlines;
+      for (my $i = 0; $i < $numlines; $i++) {
+         say $util->pad_right($leftlines[$i] || '', $maxlen + 2), $rightlines[$i] || '';
+      }
+   } else {
+      # SINGLE COLUMN OPTION
+      print $cribcontent;
    }
 }
 

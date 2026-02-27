@@ -1,0 +1,32 @@
+# Sample Markdown Document
+
+This is a **bold** statement, and this is *italicized* text.
+
+## Section 1: Lists
+
+### Unordered List
+
+- Apples
+- Bananas
+  - Ripe
+  - Green
+- Cherries
+
+### Ordered List
+
+1. First item
+2. Second item
+   1. Sub-item A
+   2. Sub-item B
+3. Third item
+
+## Section 2: Code
+
+Inline code: `print("Hello, world!")`
+
+Block code:
+
+```python
+def greet(name):
+    return f"Hello, {name}!"
+

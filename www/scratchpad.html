@@ -1,0 +1,67 @@
+<!doctype html>
+<head>
+   <meta charset="utf-8">
+   <title>Scratchpad</title>
+</head>
+<body style="font-family: monospace;margin:0;">
+   <div id="root" contenteditable="true" style="margin:0; padding:12px; min-height:100vh; outline:none">
+   </div>
+   <div id="fszUI" style="position:fixed; top:6px; right:6px; font:12px monospace"> 
+      <div id="fszSpot" style="width:30px; height:30px; border:1px solid black; opacity:.5"> </div>
+      <div id="fszPanel" style="display:none; position:absolute; top:0; right:0; padding:4px; border:1px solid black; background:white; white-space:nowrap">
+         <button id="mono" style="document.body.style.fontFamily = 'monospace' ;min-width:22px; height:22px">Mono</button>
+         <button id="variable" style="fontFamily = '' min-width:22px; height:22px">Var</button>
+         <button id="fszPlus" style="min-width:22px; height:22px">+</button> 
+         <button id="fszMinus" style="min-width:22px; height:22px; margin-left:4px">-</button> 
+         <span id="fszLabel" style="margin-left:6px"></span> 
+      </div>
+   </div>
+   <script>
+      (function () { 
+         var d = document, w = window; 
+         const $ = (id) => document.getElementById(id); 
+         var s = 1; 
+         function refresh() { 
+            $("root").style.zoom = s; 
+            var L = $("fszLabel"); 
+            if (L) L.textContent = Math.round(s * 100) + "%"; 
+         }
+         var P = $("fszPlus"), 
+             M = $("fszMinus"); 
+         var U = $("fszUI"), 
+             Q = $("fszPanel"), 
+             Mono = $("mono"), 
+             Var = $("variable");
+         Mono.onclick = function () {
+                           document.body.style.fontFamily = "monospace";
+                        }; 
+         Var.onclick = function () {
+                          document.body.style.fontFamily = "";
+                       }; 
+         P.onclick = function () { 
+                        s = Math.round((s + 0.1) * 100) / 100; 
+                        refresh();
+                     };
+         M.onclick = function () {
+                        var temp_s = Math.round((s - 0.1) * 100) / 100; 
+                        s = Math.max(0.5, temp_s); 
+                        refresh();
+                     };
+         U.onmouseenter = function () { Q.style.display = "block"; }; 
+         U.onmouseleave = function () { Q.style.display = "none"; }; 
+         refresh(); 
+         // ALL THE FOLLOWING IS NEEDED TO MOVE THE CURSOR TO THE EDIT DIV
+         const el = $('root');
+         el.focus();
+         // 3. Position the cursor
+         const range = document.createRange();
+         const sel = window.getSelection();
+         // Target the text node and place cursor at index 0 (before the space)
+         range.setStart(el.firstChild, 0);
+         range.collapse(true);
+         // 4. Apply the selection
+         sel.removeAllRanges();
+         sel.addRange(range);
+      })();
+   </script>
+</body>

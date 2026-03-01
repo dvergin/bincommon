@@ -1,0 +1,29 @@
+
+jq . data.json                                     # pretty-print JSON (identity filter)
+jq '.name' data.json                               # extract single top-level field
+jq '.user.email' data.json                         # extract nested field
+
+jq '.[0]' data.json                                # get first element of top-level array
+jq '.items[]' data.json                            # extract all elements in top-level 'items' array
+jq '.items[].id' data.json                         # extract 'id' field from each element in top-level 'items' array
+
+jq '.[] | .name' data.json                         # extract .name from each record in top-level array
+jq '.[].name' data.json                            # extract .name from each record in top-level array
+
+jq '.items[] | select(.price > 100)' data.json     # filter objects by condition
+jq '.items[] | {id, price}' data.json              # project selected fields
+
+jq -c '.items[]' data.json                         # compact one-line JSON per item
+jq -r '.items[].id' data.json                      # output raw strings (no quotes)
+jq -n '{now: now | todate}'                        # build JSON from scratch (no input)
+
+jq '[.items[].price] | add' data.json              # sum values
+jq '.items | length' data.json                     # count array elements
+
+jq '.items | sort_by(.price)' data.json            # sort array by key
+jq '[.items[].category] | unique' data.json        # extract unique values
+
+jq --arg name "Alice" '.user = $name' data.json    # inject shell string variable
+jq --argjson n 5 '.count = $n' data.json           # inject numeric JSON variable
+jq 'del(.items[].internal_id)' data.json           # delete a field
+

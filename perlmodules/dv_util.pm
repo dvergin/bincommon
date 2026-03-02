@@ -78,8 +78,8 @@ sub email {
      # Fastmail Credentials
      host => 'smtp.fastmail.com',
      ssl  => 'starttls',
-     sasl_username => 'dvergin@fastmail.net',
-     sasl_password => 'kd5f6al4k9mxqzvt',
+     sasl_username => $ENV{'FASTMAIL_USERNAME'},
+     sasl_password => $ENV{'FASTMAIL_PASSWORD'},
    });
 
    my @header = ( To      => $to,

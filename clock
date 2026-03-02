@@ -4,7 +4,7 @@ use warnings;
 
 $| = 1;
 
-print "\n" x 10;
+print "\n" x 20;
 
 my %digits = (' ' => ['    ',
                       '    ',
@@ -77,7 +77,7 @@ while (1) {
 
    my ($hr1, $hr2) = split(//, sprintf('%2d', $hour) );
    my ($mn1, $mn2) = split(//, sprintf('%02d', $min ) );
-   print `clear`, "\n" x 55;
+   print `clear`, "\n" x 65;
    #print "\n\nhr1=$hr1, hr2=$hr2, mn1=$mn1, mn2=$mn2\n\n";
    for my $line (0..4) {
       print $digits{$hr1}[$line], '  ',

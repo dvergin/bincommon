@@ -12,7 +12,7 @@ use v5.38;
 #   builtin (trim, is_bool, etc.)
 #-------------------------------------------------------------------------
 # Enable experimental features
-use builtin qw(trim)
+use builtin qw(trim);
 use feature qw(class builtin);
 no warnings qw(experimental::class experimental::builtin);
 use Data::Dumper;    #print Dumper($var_ref)

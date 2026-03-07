@@ -23,8 +23,9 @@ Example:
     use dv_gdrive;
 
     my $gdrive = dv_gdrive->new(
-        access_json_path => "$ENV{HOME}/.credentials/gdrive-access-489406-7e42133786c7.json",
-        folder_id        => "1Cryh79nUDRdkIy0_sYbsZwMby8kmtrkq",
+                    access_json_path => "/home/dvergin/.credentials/gdrive_access_oauth_client_secret.json",
+                    token_json_path  => "/home/dvergin/.credentials/gdrive_access_user_tokens.json",
+                    folder_id        => "1Cryh79nUDRdkIy0_sYbsZwMby8kmtrkq",
     );
 
 Remember to share the target Google Drive folder with the service
@@ -169,7 +170,7 @@ Returns the L<HTTP::Response> object.
 
 =head2 list_files()
 
-Return a Perl data structure describing the files in the configured
+Returns a reference to an aoh describing the files in the configured
 Google Drive folder.
 
 Each element contains at least:

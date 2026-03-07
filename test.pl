@@ -17,6 +17,7 @@ use feature qw(class builtin);
 no warnings qw(experimental::class experimental::builtin);
 use Data::Dumper;    #print Dumper($var_ref)
 
+use lib '/home/dvergin/bincommon/perlmodules';
 
 no warnings 'experimental::smartmatch', 'experimental::class';
 

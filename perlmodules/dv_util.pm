@@ -74,7 +74,7 @@ sub email {
    my $subject_bytes = encode('UTF-8', $subject);   # Needed for wide chars, e.g. Japanese
    my $message_bytes = encode('UTF-8', $message);
 
-   print "ID[$ENV{'FASTMAIL_USERNAME'} PWD[$ENV{'FASTMAIL_PASSWORD'}}\n";
+   #print "ID[$ENV{'FASTMAIL_USERNAME'} PWD[$ENV{'FASTMAIL_PASSWORD'}}\n";
 
    my $transport = Email::Sender::Transport::SMTP->new({
      # Fastmail Credentials

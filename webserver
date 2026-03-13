@@ -1,0 +1,96 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use Getopt::Std;
+use IO::Socket::INET;
+use Cwd qw(abs_path);
+
+# Parse command line options.
+my %opts;
+getopts('hp:d:', \%opts);
+usage() if $opts{h} || !$opts{d};
+
+my $port = $opts{p} || 8080;
+my $root = abs_path($opts{d}) or die "Invalid document root: $opts{d}\n";
+
+# Create the listening socket.
+my $server = IO::Socket::INET->new(
+    LocalPort => $port,
+    Type      => SOCK_STREAM,
+    Reuse     => 1,
+    Listen    => 5,
+) or die "Cannot listen on port $port: $!\n";
+
+print <<"USAGE";
+
+Listening on port $port
+Access via: http://localhost:8080/<target>
+Terminate with ^C
+
+USAGE
+
+# Accept and handle requests one at a time.
+while (my $client = $server->accept) {
+    my $request = <$client>;
+    unless (defined $request) {
+        close $client;
+        next;
+    }
+
+    my ($method, $target) = split /\s+/, $request;
+    while (defined(my $line = <$client>)) {
+        last if $line =~ /^\r?\n$/;
+    }
+
+    if (!defined $method || $method ne 'GET' || !defined $target) {
+        print $client "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\n\r\nNot Found\n";
+        close $client;
+        next;
+    }
+
+    $target =~ s/\?.*$//;
+    $target =~ s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg;
+    $target = '/index.html' if $target eq '/';
+
+    my $path = "$root$target";
+    my $resolved = abs_path($path);
+
+    if (!defined $resolved || index($resolved, $root) != 0 || !-f $resolved) {
+        print $client "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\n\r\nNot Found\n";
+        close $client;
+        next;
+    }
+
+    if ($resolved =~ /\.(html|txt)$/) {
+        serve_static($client, $resolved, $1 eq 'html' ? 'text/html' : 'text/plain');
+    }
+    elsif ($resolved =~ /\.(pl|py|js)$/) {
+        print $client "HTTP/1.1 200 OK\r\n";
+        my $output = `$resolved`;
+        print $client $output;
+    }
+    else {
+        print $client "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\n\r\nUnsupported file type\n";
+    }
+
+    close $client;
+}
+
+sub serve_static {
+    my ($client, $file, $type) = @_;
+
+    open my $fh, '<', $file or do {
+        print $client "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\n\r\nNot Found\n";
+        return;
+    };
+
+    local $/;
+    my $body = <$fh>;
+    close $fh;
+
+    print $client "HTTP/1.1 200 OK\r\nContent-Type: $type\r\n\r\n$body";
+}
+
+sub usage {
+    die "Usage: perl server.pl -d DOCROOT [-p PORT] [-h]\n";
+}

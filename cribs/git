@@ -16,26 +16,29 @@ git fetch             - fetch only
 git pending           - git fetch && git diff --name-only ..@{u}
 git pull              - fetch and merge
 
-git status            - status of local working tree
-git diff              - unstaged changes
-git diff --staged     - staged changes
+git status               - status of local working tree
+git diff                 - unstaged changes
+git diff --stage   d     - staged changes
 
 CLONE REPO
 ----------
-git clone URL         - copy repo
-cd REPO               - enter directory
-git status            - confirm clean 
-                 ==> See: AUTHENTICATION
+gh repo list             - to find the name
+gh repo clone REPO_NAME
+-or-
+git clone URL            - copy repo
+cd REPO                  - enter directory
+git status               - confirm clean 
+           ==> See: AUTHENTICATION
 
 <BREAK>
 
 CREATE FROM LOCAL DIRECTORY
 ---------------------------
-git init                       - create local repo
-git add .                      - stage all files
-git commit -m "initial commit" - first commit
-git remote add origin URL      - link GitHub  
-git push -u origin main        - push initial commit
+git init                           - create local repo
+git add .                          - stage all files
+git commit -m "initial commit"     - first commit
+gh repo create REPO_NAME --source=. --private --push
+git push                           - push initial commit
                  ==> See: AUTHENTICATION  
 
 AUTHENTICATION  (git needs a token)

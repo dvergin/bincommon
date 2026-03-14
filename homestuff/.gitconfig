@@ -9,3 +9,5 @@
 	pending = !git fetch && git diff --name-only ..@{u}
 [pull]
 	ff = only
+[init]
+	defaultBranch = main

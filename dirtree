@@ -1,0 +1,59 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use File::Find;
+use Cwd 'abs_path';
+
+my @skiplist = ('.git');
+
+my $input = shift // '.';
+my $root  = abs_path($input);
+
+die "Path does not exist: $input\n" unless defined $root;
+die "Not a directory: $root\n" unless -d $root;
+
+my %skip = map { $_ => 1 } @skiplist;
+my %children;
+
+find(
+    {
+        wanted => sub {
+            my $path = $File::Find::name;
+            return if $path eq $root;
+
+            my ($name) = $path =~ m{([^/]+)$};
+            if ($skip{$name}) {
+                $File::Find::prune = 1 if -d $path;
+                return;
+            }
+
+            my ($parent) = $path =~ m{^(.*)/[^/]+$};
+            $parent //= $root;
+
+            push @{ $children{$parent} }, $path;
+        },
+        no_chdir => 1
+    },
+    $root
+);
+
+sub print_tree {
+    my ($dir, $prefix) = @_;
+    my @items = sort @{ $children{$dir} // [] };
+
+    for my $i (0 .. $#items) {
+        my $item = $items[$i];
+        my ($name) = $item =~ m{([^/]+)$};
+        my $last = $i == $#items;
+
+        print $prefix, ($last ? "└── " : "├── "), $name, "\n";
+
+        if (-d $item) {
+            print_tree($item, $prefix . ($last ? "    " : "│   "));
+        }
+    }
+}
+
+print "$root\n";
+print_tree($root, '');
+

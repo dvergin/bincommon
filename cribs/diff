@@ -1,5 +1,12 @@
 
-diff -y file1 file2    # compare files in two columns
+FOR TWO LOCAL FILES:
+  diff -y file1 file2    # compare files in two columns
 
-See also: crib vimdiff
+FOR LOCAL AND REMOTE FILES:
+  diff localfile <(ssh amida cat remotefile)
+or
+  ssh amida cat remotefile | diff localfile -
+
+SEE ALSO:
+  crib vimdiff
 

@@ -30,6 +30,10 @@ cd REPO                  - enter directory
 git status               - confirm clean 
            ==> See: AUTHENTICATION
 
+SWITCH HTTPS -> SSH:
+git remote set-url origin "$(git remote get-url origin \
+        | sed 's#https://github.com/#git@github.com:#')"
+
 <BREAK>
 
 CREATE FROM LOCAL DIRECTORY

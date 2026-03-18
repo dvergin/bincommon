@@ -1,0 +1,18 @@
+#!/bin/bash
+
+REMOTE_PATH=/var/www/dvergin/cgi-bin/aitask.txt
+
+case "$1" in
+  list)
+    ssh amida cat $REMOTE_PATH ;;
+  edit)
+    vim scp://amida/$REMOTE_PATH ;;
+  *)
+    cat <<USAGE
+
+Usage: aitasks list
+       aitasks edit
+       aitasks help
+
+USAGE
+esac

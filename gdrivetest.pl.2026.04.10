@@ -1,0 +1,19 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use v5.38;
+
+use Data::Dumper;    #print Dumper($var_ref)
+
+use lib '/home/dvergin/bincommon/perlmodules';
+use dv_google;
+
+my $drive = dv_gdrive->new(client_secret_path => "/home/dvergin/.credentials/google_client_secret.json",
+                           token_store_path   => "/home/dvergin/.credentials/google_token_store.json",
+                           folder_id          => "1Cryh79nUDRdkIy0_sYbsZwMby8kmtrkq",
+                          );
+
+my $filelistaoh = $drive->list_files();
+
+print Dumper($filelistaoh);
+

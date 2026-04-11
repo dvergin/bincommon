@@ -10,7 +10,11 @@ use HTTP::Request;
 use Crypt::JWT qw(encode_jwt);
 use URI::Escape qw(uri_escape);
 
+###########################################################################
+###########################################################################
 class dv_gdrive {
+###########################################################################
+###########################################################################
 
 =pod
 
@@ -23,45 +27,48 @@ Example:
     use dv_gdrive;
 
     my $gdrive = dv_gdrive->new(
-                    access_json_path => "/home/dvergin/.credentials/gdrive_access_oauth_client_secret.json",
-                    token_json_path  => "/home/dvergin/.credentials/gdrive_access_user_tokens.json",
-                    folder_id        => "1Cryh79nUDRdkIy0_sYbsZwMby8kmtrkq",
+                    client_secret_path => "/home/dvergin/.credentials/google_client_secret.json",
+                    token_store_path   => "/home/dvergin/.credentials/google_token_store.json",
+                    folder_id          => "1Cryh79nUDRdkIy0_sYbsZwMby8kmtrkq",
     );
-
-Remember to share the target Google Drive folder with the service
-account email as Editor.
 
 =cut
 
-    field $token_json_path   :param;
-    field $access_json_path  :param;
-    field $folder_id         :param;
+    field $token_store_path   :param;
+    field $client_secret_path :param;
+    field $folder_id          :param;
 
-    method access_json_path () {
+###########################################################################
+    method client_secret_path () {
+###########################################################################
 =pod
 
-=head2 access_json_path()
+=head2 client_secret_path()
 
 Return the path to the JSON credential file.
 
 =cut
 
-        return $access_json_path;
+        return $client_secret_path;
     }
 
-    method token_json_path () {
+###########################################################################
+    method token_store_path () {
+###########################################################################
 =pod
 
-=head2 token_json_path()
+=head2 token_store_path()
 
 Return the path to the OAuth user token JSON file.
 
 =cut
 
-        return $token_json_path;
+        return $token_store_path;
     }
 
+###########################################################################
     method folder_id () {
+###########################################################################
 =pod
 
 =head2 folder_id()
@@ -73,14 +80,18 @@ Return the configured Google Drive folder ID.
         return $folder_id;
     }
 
+###########################################################################
     method _load_access_json () {
-        open my $fh, '<', $access_json_path
-            or die "Cannot open access_json_path '$access_json_path': $!";
+###########################################################################
+        open my $fh, '<', $client_secret_path
+            or die "Cannot open client_secret_path '$client_secret_path': $!";
 
         return decode_json(do { local $/; <$fh> });
     }
 
+###########################################################################
     method get_access_token () {
+###########################################################################
 =pod
 
 =head2 get_access_token()
@@ -89,8 +100,8 @@ Return a valid OAuth access token using the stored refresh token.
 
 =cut
 
-        my $oauth_client = $access_json_path;
-        my $token_file   = $token_json_path;
+        my $oauth_client = $client_secret_path;
+        my $token_file   = $token_store_path;
 
         open my $fh1, '<', $oauth_client
             or die "Cannot open $oauth_client: $!";
@@ -135,7 +146,9 @@ Return a valid OAuth access token using the stored refresh token.
 
 
 
+###########################################################################
     method http_get ($url, %opts) {
+###########################################################################
 =pod
 
 =head2 http_get($url, %opts)
@@ -165,13 +178,16 @@ Returns the L<HTTP::Response> object.
         return $ua->request($req);
     }
 
+###########################################################################
     method list_files () {
+###########################################################################
 =pod
 
 =head2 list_files()
 
-Returns a reference to an aoh describing the files in the configured
-Google Drive folder.
+$drive->list_files();
+      Returns a reference to an aoh describing the 
+      files in the configured Google Drive folder.
 
 Each element contains at least:
 
@@ -195,7 +211,9 @@ Each element contains at least:
         return $data->{files};
     }
 
+###########################################################################
     method get_file ($file_id) {
+###########################################################################
 =pod
 
 =head2 get_file($file_id)
@@ -216,7 +234,9 @@ Return the content of the specified Google Drive file.
         return $res->decoded_content;
     }
 
+###########################################################################
     method http_delete ($url, %opts) {
+###########################################################################
 =pod
 
 =head2 http_delete($url, %opts)
@@ -246,7 +266,9 @@ Returns the L<HTTP::Response> object.
         return $ua->request($req);
     }
 
+###########################################################################
     method delete_file ($file_id) {
+###########################################################################
 =pod
 
 =head2 delete_file($file_id)
@@ -265,7 +287,9 @@ Delete the specified Google Drive file.
         return 1;
     }
 
+###########################################################################
     method http_post ($url, %opts) {
+###########################################################################
 =pod
 
 =head2 http_post($url, %opts)
@@ -300,7 +324,9 @@ Returns the L<HTTP::Response> object.
         return $ua->request($req);
     }
 
+###########################################################################
     method put_file ($name, $content) {
+###########################################################################
 =pod
 
 =head2 put_file($name, $content)

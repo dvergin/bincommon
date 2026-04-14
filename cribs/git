@@ -31,6 +31,7 @@ git status               - confirm clean
            ==> See: AUTHENTICATION
 
 SWITCH HTTPS -> SSH:
+git remote -v            - shows https or ssh addr.
 git remote set-url origin "$(git remote get-url origin \
         | sed 's#https://github.com/#git@github.com:#')"
 

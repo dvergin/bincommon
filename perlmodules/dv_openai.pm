@@ -12,7 +12,7 @@ package dv_openai;
 #######################################################################
 
 #use ojo;
-#use Data::Dumper;
+use Data::Dumper;
 
 =head1 NAME
 
@@ -93,12 +93,13 @@ sub query {
                       . qq|             ] |
                       . qq|}|;
 
-   #print $reqcontentjson . "\n";
+   if ($opts->{'debug'}) {print $reqcontentjson . "\n"};
    my $response = HTTP::Tiny->new->post( $apiurl, { headers => {'Content-Type'  => 'application/json',
                                                                 'Authorization' => "Bearer $apikey" },
                                                     content => $reqcontentjson
                                                   }
                                        );
+   if ($opts->{'debug'}) { die Dumper($response) };
    my $content = $response->{content};
    my $json = JSON->new->decode($content);
    #print $json->{choices}[0]{message}{content};

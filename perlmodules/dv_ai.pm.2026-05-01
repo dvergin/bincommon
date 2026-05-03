@@ -7,16 +7,12 @@ no warnings 'experimental::class';
 use HTTP::Tiny ();
 use JSON::PP qw(encode_json decode_json);
 
-##########################################################################
 sub _required ($hash, $key) {
-##########################################################################
     die "Missing required parameter '$key'\n" unless exists $hash->{$key};
     return $hash->{$key};
 }
 
-##########################################################################
 sub _openai_normalize_input_for_responses ($input) {
-##########################################################################
     return $input if !ref($input);
     die "Parameter 'input' must be a string or arrayref\n" unless ref($input) eq 'ARRAY';
 
@@ -39,9 +35,7 @@ sub _openai_normalize_input_for_responses ($input) {
     return \@out;
 }
 
-##########################################################################
 sub _openai_responses_payload ($args) {
-##########################################################################
     my %payload;
 
     for my $k (keys %{$args}) {
@@ -57,17 +51,13 @@ sub _openai_responses_payload ($args) {
     return \%payload;
 }
 
-##########################################################################
 sub _anthropic_max_tokens_from_responses ($args) {
-##########################################################################
     my $v = $args->{max_output_tokens};
     die "Parameter 'max_output_tokens' is required when using Anthropic\n" unless defined $v;
     return $v;
 }
 
-##########################################################################
 sub _normalize_anthropic_metadata ($metadata, $safety_identifier) {
-##########################################################################
     my %out;
 
     if (defined $metadata) {
@@ -90,9 +80,7 @@ sub _normalize_anthropic_metadata ($metadata, $safety_identifier) {
     return \%out;
 }
 
-##########################################################################
 sub _normalize_openai_text_to_anthropic_output_config ($text) {
-##########################################################################
     die "Parameter 'text' must be a hashref\n" unless ref($text) eq 'HASH';
 
     for my $k (keys %{$text}) {
@@ -125,9 +113,7 @@ sub _normalize_openai_text_to_anthropic_output_config ($text) {
     die "Parameter 'text.format.type' value '$type' is not supported by Anthropic's native Messages API\n";
 }
 
-##########################################################################
 sub _openai_text_stop_to_anthropic ($text) {
-##########################################################################
     return undef unless defined $text;
     die "Parameter 'text' must be a hashref\n" unless ref($text) eq 'HASH';
     return undef unless exists $text->{stop};
@@ -138,9 +124,7 @@ sub _openai_text_stop_to_anthropic ($text) {
     return $stop;
 }
 
-##########################################################################
 sub _normalize_openai_responses_tools_for_anthropic ($tools) {
-##########################################################################
     return undef unless defined $tools;
 
     die "Parameter 'tools' must be an arrayref\n" unless ref($tools) eq 'ARRAY';
@@ -169,9 +153,7 @@ sub _normalize_openai_responses_tools_for_anthropic ($tools) {
     return \@out;
 }
 
-##########################################################################
 sub _normalize_openai_responses_tool_choice_for_anthropic ($tool_choice, $tools, $parallel_tool_calls) {
-##########################################################################
     my $choice;
 
     if (defined $tool_choice) {
@@ -226,9 +208,7 @@ sub _normalize_openai_responses_tool_choice_for_anthropic ($tool_choice, $tools,
     return $choice;
 }
 
-##########################################################################
 sub _json_string_to_hashref ($s) {
-##########################################################################
     return {} if !defined($s) || $s eq '';
     return $s if ref($s) eq 'HASH';
     my $decoded = eval { decode_json($s) };
@@ -236,9 +216,7 @@ sub _json_string_to_hashref ($s) {
     return $decoded;
 }
 
-##########################################################################
 sub _blocks_or_string ($blocks) {
-##########################################################################
     return '' unless $blocks && @$blocks;
     return $blocks->[0]{text} if @$blocks == 1 && ($blocks->[0]{type} // '') eq 'text';
     return $blocks;
@@ -272,9 +250,7 @@ sub _tool_result_content_from_responses ($content) {
     die "Unsupported tool result content type for Anthropic conversion\n";
 }
 
-##########################################################################
 sub _openai_input_image_part_to_anthropic_block ($part) {
-##########################################################################
     if (exists $part->{image_url}) {
         my $url = $part->{image_url};
         if (ref($url) eq 'HASH') {
@@ -297,9 +273,7 @@ sub _openai_input_image_part_to_anthropic_block ($part) {
     die "input_image part must contain 'image_url'\n";
 }
 
-##########################################################################
 sub _responses_content_to_anthropic_blocks ($content, $role) {
-##########################################################################
     return [] if !defined $content;
 
     if (!ref($content)) {
@@ -356,9 +330,7 @@ sub _responses_content_to_anthropic_blocks ($content, $role) {
     return \@blocks;
 }
 
-##########################################################################
 sub _push_openai_message_item_to_anthropic ($messages, $system_blocks, $legacy_function_id_for, $item) {
-##########################################################################
     my $role = $item->{role} // die "Message item requires 'role'\n";
 
     if ($role eq 'system' || $role eq 'developer') {
@@ -404,9 +376,7 @@ sub _push_openai_message_item_to_anthropic ($messages, $system_blocks, $legacy_f
     die "Unsupported message role '$role' for Anthropic conversion\n";
 }
 
-##########################################################################
 sub _responses_input_to_anthropic_messages ($input, $instructions) {
-##########################################################################
     my @system_blocks;
     if (defined $instructions) {
         push @system_blocks, { type => 'text', text => $instructions };
@@ -470,9 +440,7 @@ sub _responses_input_to_anthropic_messages ($input, $instructions) {
     return ($system, \@messages);
 }
 
-##########################################################################
 sub _anthropic_payload_from_openai_responses ($args) {
-##########################################################################
     _required($args, 'model');
     die "Missing required parameter 'input'\n" unless exists $args->{input};
 
@@ -539,13 +507,8 @@ sub _anthropic_payload_from_openai_responses ($args) {
     return \%payload;
 }
 
-##########################################################################
 class dv_ai {
-##########################################################################
-
-##########################################################################
     method llm_response ($args) {
-##########################################################################
         die "llm_response() requires a hashref\n" unless ref($args) eq 'HASH';
 
         my $provider = lc(_required($args, 'provider'));

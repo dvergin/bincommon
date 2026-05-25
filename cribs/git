@@ -35,6 +35,11 @@ git remote -v            - shows https or ssh addr.
 git remote set-url origin "$(git remote get-url origin \
         | sed 's#https://github.com/#git@github.com:#')"
 
+MISCELLANEOUS
+-------------
+git config --global alias.<alias_name> '!....'
+Config files is ~/.gitconfig
+
 <BREAK>
 
 CREATE FROM LOCAL DIRECTORY
@@ -63,7 +68,12 @@ Then:
 or: git push                  #After clone and local add
     (And enter token as pwd. git stores token as above)
 
-MISCELLANEOUS
--------------
-git config --global alias.<alias_name> '!....'
-Config files is ~/.gitconfig
+WHEN SYNC IS REFUSED
+--------------------
+git add .
+git commit -m "updated some stuff"
+git pull --rebase   # pull and overlay local changes
+   vim conflicted_file     # If needed. Find/fix areas with '<<<<'
+   git add filename
+   git rebase --continue   # remember to push after this
+git push

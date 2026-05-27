@@ -1,0 +1,1 @@
+ssh -t xps8700 /home/dvergin/.local/bin/hermes

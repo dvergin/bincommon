@@ -7,11 +7,15 @@ use Data::Dumper;    #print Dumper($var_ref)
 
 use lib '/home/dvergin/bincommon/perlmodules';
 
-my @boxes = qw/raspi xps8700/;
+my @boxes = qw/amida raspi xps8700/;
 
 for my $box (@boxes) {
    say "Checking git repo on $box";
-   my $response = `ssh $box "cd bincommon; git fetch; git status"`;
-   say $response;
+   my $resp = `ssh $box "cd bincommon; git fetch; git status"`;
+   if ($resp =~ /(Your branch is behind.+)/) {
+      my $alert = $1;
+      $alert =~ s/Your branch/$box/;
+      say $alert;
+   }
    say '--------------------------------------------------------'
 }

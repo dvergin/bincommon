@@ -19,7 +19,7 @@ for my $box (@boxes) {
    my $resp = $box eq $ENV{'MACHINE'}
             ? `cd ~/bincommon; git fetch; git status`
             : `ssh $box "cd ~/bincommon; git fetch; git status"`;
-   $report .= "- - - -\n$resp- - - -\n";
+   #$report .= "- - - -\n$resp- - - -\n";
    if ($resp =~ /(Your branch is behind.+)/) {
       my $alert = $1;
       $alert =~ s/Your branch/$box/;

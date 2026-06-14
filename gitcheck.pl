@@ -51,6 +51,9 @@ for my $box (@boxes) {
       if ($git_status_report =~ /Changes to be committed/) {
          push(@rpt_ary, '/ changes to be committed');
       }
+      if ($git_status_report =~ /Your branch is ahead/) {
+         push(@rpt_ary, '/ ahead of main');
+      }
       if (@rpt_ary) {
          $prob_details{$box} = \@rpt_ary;
       } else {

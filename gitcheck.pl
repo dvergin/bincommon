@@ -65,7 +65,7 @@ if (@offline) {
    $short_report .= 'Off-line: ' . join( ' ', @offline) . "\n"; }
 if (@okay_boxes) {
    for my $okay_box (@okay_boxes) {
-      $short_report .= "$okay_box is okay\n";
+      $short_report .= "Okay: $okay_box\n";
    }
 }
 if (%prob_details) {

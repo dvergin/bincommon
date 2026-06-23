@@ -62,7 +62,10 @@ for my $box (@boxes) {
    }
 }
 if (@offline) {
-   $short_report .= 'Off-line: ' . join( ' ', @offline) . "\n"; }
+   for my $off_box (@offline) {
+      $short_report .= "Off-line: $off_box\n";
+   }
+}
 if (@okay_boxes) {
    for my $okay_box (@okay_boxes) {
       $short_report .= "Okay: $okay_box\n";
@@ -71,7 +74,7 @@ if (@okay_boxes) {
 if (%prob_details) {
    for my $box (@boxes) {
       if ( exists $prob_details{$box} ) {
-         $short_report .= "$box: " . join( ' ', @{ $prob_details{$box} } ) . "\n";
+         $short_report .= "ACTION NEEDED - $box: " . join( ' ', @{ $prob_details{$box} } ) . "\n";
       }
    }
 }

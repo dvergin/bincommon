@@ -12,3 +12,7 @@ Move between panes  ^b [arrow keys]
 Detach session      ^b d
 Reattach later      tmux attach
 
+Tomove the status bar to the top
+   add this to ~/.tmux.conf:
+
+  set -g status-position top

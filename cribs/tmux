@@ -6,6 +6,7 @@ End current window  ^b & (and ~ end)
 Next window         ^b n
 Previous window     ^b p
 List windows        ^b w
+Rename window       <b ,
 Split pane vert     ^b %
 Split pane horiz    ^b "
 Move between panes  ^b [arrow keys]

@@ -88,6 +88,7 @@ if ($sendemail) {
                 subject => 'Git Pull Report',
                 message => $email_report);
 } else {
+   say "\n";
    say $email_report;
 }
 

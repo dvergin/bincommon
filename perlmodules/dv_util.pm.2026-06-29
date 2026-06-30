@@ -1,10 +1,10 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-
-#use Email::Sender::Simple;
-#use Email::Simple;
-#use Email::Simple::Creator;
+use Email::Sender::Simple;
+use Email::Sender::Transport::SMTP;
+use Email::Simple;
+use Email::Simple::Creator;
 
 =head1 NAME
 
@@ -30,9 +30,6 @@ use warnings;
 package dv_util; 
 #######################################################################
 use Encode qw(encode);
-use Email::Sender::Transport::SMTP;
-use Email::Stuffer;
-use Data::Dumper;    #print Dumper($var_ref)
 
 =head2 new()
 
@@ -67,34 +64,41 @@ sub email {
 
 =cut
 
-   my $self = shift;
-   #die Dumper(\@_);
+   my $class = shift;
    my %opts  = @_;
+   my $from    = $opts{from}    || 'David Vergin <dvergin@fastmail.net';
+   my $to      = $opts{to}      || 'David Vergin <dvergin@fastmail.net';
+   my $subject = $opts{subject} || 'Message from David';
+   my $message = $opts{message} || 'Message is in subject line';
+
+   my $subject_bytes = encode('UTF-8', $subject);   # Needed for wide chars, e.g. Japanese
+   my $message_bytes = encode('UTF-8', $message);
+
+   #print "ID[$ENV{'FASTMAIL_USERNAME'} PWD[$ENV{'FASTMAIL_PASSWORD'}}\n";
 
    my $transport = Email::Sender::Transport::SMTP->new({
+     # Fastmail Credentials
      host => 'smtp.fastmail.com',
      ssl  => 'starttls',
      sasl_username => $ENV{'FASTMAIL_USERNAME'},
      sasl_password => $ENV{'FASTMAIL_PASSWORD'},
+     
+
    });
 
-   #Email::Stuffer can take any of the following paramaters
-   # transport  to from cc bcc reply_to  subject  text_body html_body attach
+   my @header = ( To      => $to,
+                  From    => $from,
+                  Subject => $subject_bytes,
+                );
+   if ($opts{cc}) {
+      push( @header, (Cc => $opts{cc}) );
+   }
+   my $email = Email::Simple->create(
+      header => \@header,
+                body => $message_bytes,
+   );
 
-   my $properties = {};
-   $properties->{from} = $opts{from} || 'David Vergin <dvergin@fastmail.net';
-   $properties->{to}   = $opts{to}   || 'David Vergin <dvergin@fastmail.net';
-   $properties->{cc}   = $opts{cc}  if exists $opts{cc};
-   $properties->{bcc}  = $opts{bcc} if exists $opts{bcc};
-   Email::Stuffer->new($properties)
-      ->transport($transport)
-      ->subject($opts{subject},   (charset      => 'UTF-8',
-                                   encoding     => 'quoted-printable',
-                                   content_type => 'text/plain'))
-      ->text_body($opts{message}, (charset      => 'UTF-8',
-                                   encoding     => 'quoted-printable',
-                                   content_type => 'text/plain'))
-      ->send;
+   Email::Sender::Simple->send($email, { transport => $transport });
 }
 
 #######################################################################

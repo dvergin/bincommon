@@ -37,7 +37,7 @@ sub email {
    });
 
    #Email::Stuffer can take any of the following paramaters
-   #   transport   to from cc bcc reply_to   subject    text_body html_body
+   # transport  to from cc bcc reply_to  subject  text_body html_body attach
 
    my $properties = {};
    $properties->{from} = $opts{from} || 'David Vergin <dvergin@fastmail.net';

@@ -80,7 +80,8 @@ if (%problem_details) {
 }
 
 my $email_report = $short_report;
-$email_report .= $long_report;
+
+#$email_report .= $long_report;
 
 if ($sendemail) {
    $util->email(to      => 'David Vergin <dvergin@fastmail.net>',
